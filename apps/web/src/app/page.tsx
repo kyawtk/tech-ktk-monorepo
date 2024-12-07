@@ -1,5 +1,14 @@
+"use client";
 import Image from "next/image";
 import { Card } from "@repo/ui/card";
+
+//dynamic import face scan web cam
+const FaceScanWebCam = dynamic(() => import("./components/FaceScan/FaceScanWebCam"), {
+  ssr: false,
+});
+
+import { useState } from "react";
+import dynamic from "next/dynamic";
 
 function Gradient({
   conic,
@@ -19,69 +28,30 @@ function Gradient({
   );
 }
 
-const LINKS = [
-  {
-    title: "Docs",
-    href: "https://turbo.build/repo/docs",
-    description: "Find in-depth information about Turborepo features and API.",
-  },
-  {
-    title: "Learn",
-    href: "https://turbo.build/repo/docs/handbook",
-    description: "Learn more about monorepos with our handbook.",
-  },
-  {
-    title: "Templates",
-    href: "https://turbo.build/repo/docs/getting-started/from-example",
-    description: "Choose from over 15 examples and deploy with a single click.",
-  },
-  {
-    title: "Deploy",
-    href: "https://vercel.com/new",
-    description:
-      "Instantly deploy your Turborepo to a shareable URL with Vercel.",
-  },
-];
-
 export default function Page(): JSX.Element {
+  const [capturedImg, setCapturedImg] = useState("");
   return (
     <main className="flex flex-col items-center justify-between min-h-screen p-24">
       <div className="z-10 items-center justify-between w-full max-w-5xl font-mono text-sm lg:flex">
-        <p className="fixed top-0 left-0 flex justify-center w-full px-4 pt-8 pb-6 border-b bg-gradient-to-b backdrop-blur-2xl border-neutral-800 bg-zinc-800/30 from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:bg-zinc-800/30">
-          examples/with-tailwind -&nbsp;
-          <code className="font-mono font-bold">web</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex items-end justify-center w-full h-48 bg-gradient-to-t from-black via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="flex gap-2 p-8 pointer-events-none place-items-center lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-turbo&utm_medium=basic&utm_campaign=create-turbo"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            By{" "}
-            <Image
-              alt="Vercel Logo"
-              className="invert"
-              height={24}
-              priority
-              src="/vercel.svg"
-              width={100}
-            />
-          </a>
+        <a
+          className="fixed top-0 left-0 flex justify-center w-full px-4 pt-8 pb-6 border-b bg-gradient-to-b backdrop-blur-2xl border-neutral-800 bg-zinc-800/30 from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:bg-zinc-800/30"
+          href="https://ktkweb.site/blog/building-a-face-detection-camera-with-auto-capture-using-React-and-Mediapipe"
+        >
+          Source code
+        </a>
+        <div className=" flex items-end justify-center w-full h-48 bg-gradient-to-t from-black via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
+          <FaceScanWebCam
+            capturedImg={capturedImg}
+            handleCapture={setCapturedImg}
+            setCapturedImg={setCapturedImg}
+          />
         </div>
       </div>
 
       <div className="relative flex place-items-center ">
         <div className="font-sans w-auto pb-16 pt-[48px] md:pb-24 lg:pb-32 md:pt-16 lg:pt-20 flex justify-between gap-8 items-center flex-col relative z-0">
           <div className="z-50 flex items-center justify-center w-full">
-            <div className="absolute min-w-[614px] min-h-[614px]">
-              <Image
-                alt="Turborepo"
-                height={614}
-                src="circles.svg"
-                width={614}
-              />
-            </div>
+
             <div className="absolute z-50 flex items-center justify-center w-64 h-64">
               <Gradient
                 className="opacity-90 w-[120px] h-[120px]"
@@ -89,7 +59,7 @@ export default function Page(): JSX.Element {
                 small
               />
             </div>
-
+            {/*
             <div className="w-[120px] h-[120px] z-50">
               <Image
                 alt=""
@@ -98,14 +68,14 @@ export default function Page(): JSX.Element {
                 src="turborepo.svg"
                 width={120}
               />
-            </div>
+            </div> */}
           </div>
           <Gradient
             className="top-[-500px] opacity-[0.15] w-[1000px] h-[1000px]"
             conic
           />
           <div className="z-50 flex flex-col items-center justify-center gap-5 px-6 text-center lg:gap-6">
-            <svg
+            {/* <svg
               className="w-[160px] md:w-[200px] fill-white"
               viewBox="0 0 506 50"
               width={200}
@@ -121,17 +91,9 @@ export default function Page(): JSX.Element {
               <path d="M343.254 1.05332V48.4175H389.299V37.467H355.92V29.7489H385.539V19.0622H355.92V12.0038H389.299V1.05332H343.254Z" />
               <path d="M408.46 33.3111H425.677C437.221 33.3111 444.807 27.7699 444.807 17.2152C444.807 6.59453 437.221 1.05332 425.677 1.05332H395.53V48.4175H408.46V33.3111ZM408.46 22.5585V11.8719H424.951C429.569 11.8719 432.076 13.8509 432.076 17.2152C432.076 20.5135 429.569 22.5585 424.951 22.5585H408.46Z" />
               <path d="M476.899 0.261719C460.341 0.261719 448.401 10.6185 448.401 24.7354C448.401 38.8523 460.341 49.2091 476.899 49.2091C493.456 49.2091 505.33 38.8523 505.33 24.7354C505.33 10.6185 493.456 0.261719 476.899 0.261719ZM476.899 11.4761C485.606 11.4761 492.137 16.6215 492.137 24.7354C492.137 32.8493 485.606 37.9947 476.899 37.9947C468.191 37.9947 461.66 32.8493 461.66 24.7354C461.66 16.6215 468.191 11.4761 476.899 11.4761Z" />
-            </svg>
+            </svg> */}
           </div>
         </div>
-      </div>
-
-      <div className="grid mb-32 text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        {LINKS.map(({ title, href, description }) => (
-          <Card href={href} key={title} title={title}>
-            {description}
-          </Card>
-        ))}
       </div>
     </main>
   );
